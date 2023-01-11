@@ -36,12 +36,22 @@ class Evaluator:
 
     def evaluate(self, input_data):
         normalize_data(input_data)
-        return {
+        results = {
             "bleu"     : get_bleu(input_data, self.reference_dialogs)                             if self.bleu else None,
             "success"  : get_success(input_data, self.database, self.goals, self.booked_domains)  if self.success else None,
             "richness" : get_richness(input_data)                                                 if self.richness else None,
             "dst"      : get_dst(input_data, self.gold_states)                                    if self.dst else None,
         }
+        if "bleu" in results and "success" in results:
+            results["Combined Score"] = {
+                "Combined Score": results["bleu"]["mwz22"]
+                                  + (
+                                          results["success"]["inform"]["total"]
+                                          + results["success"]["success"]["total"]
+                                  )
+                                  / 2
+            }
+        return results
 
 
 def get_bleu(input_data, reference_dialogs):
