@@ -13,7 +13,8 @@ def normalize_data(input_data):
 
     for dialogue in input_data.values():
         for turn in dialogue:
-            turn["response"] = slot_name_normalizer(turn["response"].lower())
+            # turn["response"] = slot_name_normalizer(turn["response"].lower())
+            turn["response"] = slot_name_normalizer(turn["response"])
             turn["response"] = md.detokenize(mt.tokenize(turn["response"].replace('-s', '').replace('-ly', '')))
 
             if "state" not in turn:
